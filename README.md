@@ -1,4 +1,4 @@
-# YouTube Audio Transcriber
+# YouTube Audio Transcriber (YouTube-to-text)
 
 YouTube URL에서 오디오를 추출하고 텍스트로 변환하는 프로그램
 
