@@ -1,0 +1,9 @@
+yt-dlp>=2023.7.6
+SpeechRecognition>=3.10.0
+pydub>=0.25.1
+openai-whisper>=20230314
+torch>=2.0.0
+torchaudio>=2.0.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-multipart>=0.0.6
