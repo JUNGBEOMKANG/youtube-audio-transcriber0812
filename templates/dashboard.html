@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube 동영상의 음성을 텍스트로 변환하는 웹 애플리케이션">
+    <meta name="keywords" content="YouTube, 음성인식, 텍스트 변환, 자막, 전사">
+    <meta name="author" content="YouTube Audio Transcriber">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="YouTube Audio Transcriber">
+    <meta property="og:description" content="YouTube 동영상의 음성을 고품질 AI로 텍스트로 변환합니다">
+    <meta property="og:type" content="website">
+    
+    <title>유튜브 큐레이터(정범test/0812_v01) - 음성을 텍스트로 변환</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/static/css/dashboard.css" as="style">
+    <link rel="preload" href="/static/js/dashboard-components.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/dashboard.css?v=glassmorphism-2025-0812-v4">
+    
+    <!-- Skip to content link for accessibility -->
+    <style>
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+        .skip-to-content:focus {
+            top: 6px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content link -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    
+    <!-- ARIA Live Region for Screen Reader Announcements -->
+    <div id="aria-live-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <header class="dashboard-header" role="banner">
+            <h1 class="dashboard-title">
+                <span role="img" aria-label="음성 아이콘">🎵</span>
+                유튜브 큐레이터(정범test/0812_v01)
+            </h1>
+            <p class="dashboard-subtitle">
+                YouTube 동영상의 음성을 고품질 AI로 텍스트로 변환합니다
+            </p>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main-content" class="dashboard-card" role="main">
+            <!-- Transcription Form -->
+            <form id="transcribeForm" novalidate aria-labelledby="form-title">
+                <h2 id="form-title" class="sr-only">음성 변환 설정</h2>
+                
+                <!-- URL Input -->
+                <div class="form-group">
+                    <label for="url" class="form-label">
+                        YouTube URL
+                        <span class="text-red-500" aria-label="필수 입력">*</span>
+                    </label>
+                    <input 
+                        type="url" 
+                        id="url" 
+                        name="url" 
+                        class="form-input"
+                        placeholder="https://youtube.com/watch?v=..."
+                        required
+                        aria-describedby="url-help"
+                        autocomplete="url"
+                    >
+                    <div id="url-help" class="text-sm text-gray-600 mt-1">
+                        YouTube 동영상 또는 유튜브 쇼츠 URL을 입력하세요
+                    </div>
+                </div>
+
+                <!-- Options Grid -->
+                <fieldset class="options-grid">
+                    <legend class="form-label">변환 설정</legend>
+                    
+                    <!-- Audio Format -->
+                    <div class="form-group">
+                        <label for="format" class="form-label">오디오 포맷</label>
+                        <select id="format" name="format" class="form-input form-select" aria-describedby="format-help">
+                            <option value="mp3">MP3 (권장)</option>
+                            <option value="wav">WAV (고품질)</option>
+                        </select>
+                        <div id="format-help" class="text-sm text-gray-600 mt-1">
+                            MP3는 빠르고, WAV는 더 높은 음질을 제공합니다
+                        </div>
+                    </div>
+
+                    <!-- Recognition Method -->
+                    <div class="form-group">
+                        <label for="method" class="form-label">음성 인식 방법</label>
+                        <select id="method" name="method" class="form-input form-select" aria-describedby="method-help">
+                            <option value="whisper">Whisper AI (권장)</option>
+                            <option value="google">Google Speech</option>
+                            <option value="both">두 방법 모두</option>
+                        </select>
+                        <div id="method-help" class="text-sm text-gray-600 mt-1">
+                            Whisper는 오프라인, Google은 온라인 처리됩니다
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Advanced Options -->
+                <details class="form-group">
+                    <summary class="form-label cursor-pointer" style="list-style: none;">
+                        <span>고급 설정</span>
+                        <span style="float: right;">▼</span>
+                    </summary>
+                    
+                    <div class="mt-4">
+                        <div class="form-group">
+                            <label for="model" class="form-label">Whisper 모델 크기</label>
+                            <select id="model" name="model" class="form-input form-select" aria-describedby="model-help">
+                                <option value="tiny">Tiny (가장 빠름, 기본 품질)</option>
+                                <option value="base" selected>Base (빠름, 좋은 품질)</option>
+                                <option value="small">Small (보통 속도, 높은 품질)</option>
+                                <option value="medium">Medium (느림, 매우 높은 품질)</option>
+                                <option value="large">Large (매우 느림, 최고 품질)</option>
+                            </select>
+                            <div id="model-help" class="text-sm text-gray-600 mt-1">
+                                더 큰 모델은 더 정확하지만 처리 시간이 오래 걸립니다
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit" 
+                    id="submitBtn"
+                    class="btn btn-primary w-full"
+                    aria-describedby="submit-help"
+                >
+                    <span>변환 시작</span>
+                </button>
+                <div id="submit-help" class="text-sm text-gray-600 mt-2 text-center">
+                    처리 시간은 동영상 길이와 선택한 설정에 따라 달라집니다
+                </div>
+            </form>
+
+            <!-- Error Messages -->
+            <div id="error-container" class="status-card hidden" role="alert" aria-live="assertive">
+                <!-- Error content will be inserted here -->
+            </div>
+
+            <!-- Processing Status -->
+            <div id="status" class="status-card hidden" role="status" aria-live="polite">
+                <div class="status-indicator">
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <span id="statusText" class="status-text">처리 중...</span>
+                </div>
+                <div class="text-sm text-gray-600 mt-2">
+                    이 창을 닫지 마세요. 처리 상황을 실시간으로 확인할 수 있습니다.
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <section id="result" class="result-container hidden" role="region" aria-labelledby="result-title">
+                <h3 id="result-title" class="result-header">
+                    <span role="img" aria-label="문서 아이콘">📝</span>
+                    변환 결과
+                </h3>
+                <div class="tab-container">
+                    <div class="tab-nav" role="tablist" aria-label="결과 유형">
+                        <button id="tab-full-script" role="tab" aria-selected="true" aria-controls="panel-full-script" class="tab-button active">전체 스크립트</button>
+                        <button id="tab-key-summary" role="tab" aria-selected="false" aria-controls="panel-key-summary" class="tab-button">핵심요약</button>
+                        <button id="tab-curator" role="tab" aria-selected="false" aria-controls="panel-curator" class="tab-button">큐레이터</button>
+                    </div>
+                    <div id="panel-full-script" role="tabpanel" aria-labelledby="tab-full-script" class="tab-panel active">
+                        <div id="fullScriptContent" class="result-content" role="region" aria-label="전체 스크립트">
+                            <!-- Full script will be inserted here -->
+                        </div>
+                    </div>
+                    <div id="panel-key-summary" role="tabpanel" aria-labelledby="tab-key-summary" class="tab-panel" style="display: none;">
+                        <div id="keySummaryContent" class="result-content" role="region" aria-label="핵심요약">
+                            <!-- Key summary will be inserted here -->
+                        </div>
+                    </div>
+                    <div id="panel-curator" role="tabpanel" aria-labelledby="tab-curator" class="tab-panel" style="display: none;">
+                        <div id="curatorContent" class="result-content" role="region" aria-label="큐레이터 요약">
+                            <!-- Curator summary will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Download Button -->
+                <div class="text-center mt-4">
+                    <button 
+                        id="downloadBtn" 
+                        class="btn btn-success"
+                        aria-label="변환된 텍스트를 텍스트 파일로 다운로드"
+                    >
+                        <span role="img" aria-hidden="true">💾</span>
+                        텍스트 파일 다운로드
+                    </button>
+                </div>
+                
+                <!-- Result Info -->
+                <div class="text-sm text-gray-600 mt-4 text-center">
+                    결과에 만족하신다면 다른 동영상도 시도해보세요!
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm mt-8" role="contentinfo">
+            <p>
+                <strong>YouTube Audio Transcriber</strong> - 
+                고품질 AI 음성 인식으로 동영상을 텍스트로 변환
+            </p>
+            <p class="mt-2">
+                <a href="https://github.com/JUNGBEOMKANG/YouTube-to-text" 
+                   class="text-blue-600 hover:text-blue-800 underline"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    GitHub에서 소스 코드 보기
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/dashboard-components.js"></script>
+    
+    <!-- Performance and Analytics -->
+    <script>
+        // Performance monitoring
+        if ('PerformanceObserver' in window) {
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.entryType === 'navigation') {
+                        console.log('Page Load Performance:', {
+                            domContentLoaded: entry.domContentLoadedEventEnd - entry.domContentLoadedEventStart,
+                            loadComplete: entry.loadEventEnd - entry.loadEventStart
+                        });
+                    }
+                }
+            });
+            observer.observe({ entryTypes: ['navigation'] });
+        }
+
+        // Basic error tracking
+        window.addEventListener('error', (e) => {
+            console.error('JavaScript Error:', {
+                message: e.message,
+                filename: e.filename,
+                lineno: e.lineno,
+                colno: e.colno
+            });
+        });
+
+        // Service Worker registration for future PWA features
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {
+                // Service worker not available, continue normally
+            });
+        }
+    </script>
+</body>
+</html>

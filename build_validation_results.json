@@ -1,0 +1,42 @@
+{
+  "passed": [
+    "Found: app.py",
+    "Found: requirements.txt",
+    "Found: static/css/dashboard.css",
+    "Found: static/js/dashboard-components.js",
+    "Found: templates/dashboard.html",
+    "Found: test_accessibility.py",
+    "CSS design system with custom properties",
+    "CSS: Modern focus management",
+    "CSS: Reduced motion support",
+    "CSS: Dark mode support",
+    "CSS: High contrast support",
+    "CSS: Screen reader only class",
+    "JavaScript: Accessibility utilities",
+    "JavaScript: FormComponents found",
+    "JavaScript: StatusComponents found",
+    "JavaScript: ResultComponents found",
+    "Semantic HTML: main, header, footer, section",
+    "HTML: ARIA labels",
+    "HTML: ARIA descriptions",
+    "HTML: ARIA live regions",
+    "HTML: ARIA roles",
+    "HTML: Language attribute",
+    "Form: 4 labels found",
+    "Form: 1 required fields marked",
+    "Form: 1 fieldsets for grouping",
+    "HTML: Skip to content link",
+    "Meta: Responsive viewport",
+    "Meta: Meta description",
+    "Meta: UTF-8 encoding",
+    "ARIA: Live announcer element",
+    "Performance: Resource preloading",
+    "Performance: Performance monitoring",
+    "Performance: Service worker ready"
+  ],
+  "failed": [],
+  "warnings": [
+    "JavaScript: Limited keyboard navigation"
+  ],
+  "score": 98.5
+}

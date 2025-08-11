@@ -1,0 +1,764 @@
+/* 개선된 글래스모피즘 디자인 - 유튜브 큐레이터 (정범test/0812_v01) */
+
+/* 개선된 글래스모피즘 CSS 변수 */
+:root {
+  /* 새로운 메인 배경 그라디언트 */
+  --bg-main: linear-gradient(135deg, #8BBDFF 0%, #61DBF0 100%);
+  --bg-overlay: rgba(255, 255, 255, 0.03);
+  
+  /* 글래스모피즘 색상 개선 */
+  --glass-light: rgba(255, 255, 255, 0.15);
+  --glass-dark: rgba(0, 0, 0, 0.2);
+  --glass-darker: rgba(0, 0, 0, 0.35);
+  --glass-border-light: rgba(255, 255, 255, 0.25);
+  --glass-border-dark: rgba(0, 0, 0, 0.15);
+  
+  /* 텍스트 색상 */
+  --text-white: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-gray-dark: #2d3748;
+  --text-glass-white: rgba(255, 255, 255, 0.95);
+  --text-glass-dark: rgba(26, 26, 26, 0.9);
+  
+  /* 하늘색 그라디언트 */
+  --sky-gradient: linear-gradient(135deg, #87CEEB 0%, #4FC3F7 100%);
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  
+  /* 엠비언트 라이트 효과 */
+  --ambient-light: radial-gradient(ellipse 400px 200px at 50% -50%, rgba(255, 255, 255, 0.4), transparent);
+  
+  /* 그림자 */
+  --shadow-glass-light: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+  --shadow-glass-dark: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+  --shadow-ambient: 0 -20px 60px 0 rgba(255, 255, 255, 0.3);
+  
+  /* 블러 효과 */
+  --blur-glass: blur(20px);
+  --blur-light: blur(12px);
+  --blur-heavy: blur(25px);
+  
+  /* 글꼴 */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', Roboto, sans-serif;
+  
+  /* 보더 반지름 */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-2xl: 40px;
+  --radius-round: 50px;
+}
+
+/* 기본 스타일 리셋 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 바디 스타일 - 새로운 배경 */
+body {
+  font-family: var(--font-family);
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: var(--bg-main);
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 배경 오버레이 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-overlay);
+  backdrop-filter: var(--blur-light);
+  z-index: -1;
+}
+
+/* 포커스 관리 */
+*:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* 메인 컨테이너 */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* 개선된 헤더 스타일 */
+.dashboard-header {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--glass-light);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--shadow-glass-light);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 호버시 엠비언트 라이트 효과 */
+.dashboard-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: var(--ambient-light);
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.dashboard-header:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover), var(--shadow-ambient);
+}
+
+.dashboard-header:hover::before {
+  opacity: 1;
+}
+
+.dashboard-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-white);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-glass-white);
+  margin: 0;
+  font-weight: 500;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+/* 메인 카드 스타일 */
+.dashboard-card {
+  background: var(--glass-light);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--shadow-glass-light);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* 개선된 폼 스타일 */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-glass-dark);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+/* 어두운 계열 블러 입력 필드 */
+.form-input, .form-select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  background: var(--glass-dark);
+  backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--glass-border-dark);
+  border-radius: var(--radius-md);
+  color: var(--text-white);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-glass-dark);
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-input:focus, .form-select:focus {
+  background: var(--glass-darker);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* 옵션 그리드 */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 0;
+  border: none;
+}
+
+.options-grid legend {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-glass-dark);
+  margin-bottom: 1rem;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
+  display: block;
+  width: 100%;
+}
+
+/* 높은 곡률을 가진 버튼 스타일 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--shadow-glass-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: var(--text-white);
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn-success {
+  background: var(--success-gradient);
+  color: var(--text-white);
+}
+
+.btn-success:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 상태 카드 */
+.status-card {
+  background: var(--glass-light);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border-light);
+  padding: 2rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-glass-light);
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-glass-dark);
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(0, 0, 0, 0.3);
+  border-top: 3px solid var(--text-dark);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 결과 컨테이너 */
+.result-container {
+  background: var(--glass-light);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border-light);
+  box-shadow: var(--shadow-glass-light);
+  padding: 2rem;
+  margin-top: 2rem;
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-glass-dark);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+/* 개선된 탭 스타일 - 어두운 글래스 */
+.tab-container {
+  margin-top: 1.5rem;
+}
+
+.tab-nav {
+  display: flex;
+  background: var(--glass-dark);
+  backdrop-filter: var(--blur-heavy);
+  border-radius: var(--radius-lg);
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--glass-border-dark);
+  box-shadow: var(--shadow-glass-dark);
+}
+
+/* 검정 계열 글씨의 탭 버튼 */
+.tab-button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  transform-origin: center;
+}
+
+.tab-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.tab-button:hover::before {
+  left: 100%;
+}
+
+.tab-button:hover {
+  color: var(--text-gray-dark);
+  background: rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 하늘색 그라디언트 활성 탭 + 물방울 애니메이션 */
+.tab-button.active {
+  background: var(--sky-gradient);
+  color: var(--text-white);
+  box-shadow: var(--shadow-glass-light);
+  transform: scale(1.05) translateY(-2px);
+  animation: dropletScale 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 물방울 스케일 애니메이션 */
+@keyframes dropletScale {
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.1) translateY(-4px); }
+  100% { transform: scale(1.05) translateY(-2px); }
+}
+
+.tab-panel {
+  padding: 1.5rem 0;
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 개선된 결과 콘텐츠 - 어두운 글래스 배경 */
+.result-content {
+  background: var(--glass-dark);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--glass-border-dark);
+  box-shadow: var(--shadow-glass-dark);
+}
+
+.result-content p {
+  color: var(--text-white);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+/* 스페이싱 유틸리티 */
+.space-y-3 > * + * {
+  margin-top: 1rem;
+}
+
+.space-y-6 > * + * {
+  margin-top: 2rem;
+}
+
+/* 검정색 글래스 카드 - 핵심요약 */
+.key-summary-item {
+  background: var(--glass-dark);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-md);
+  border-left: 4px solid;
+  border-left-color: transparent;
+  border-image: var(--sky-gradient) 1;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-glass-dark);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.key-summary-item:hover {
+  transform: translateX(4px);
+  background: var(--glass-darker);
+  box-shadow: var(--shadow-hover);
+}
+
+.key-summary-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--sky-gradient);
+  color: var(--text-white);
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-right: 1rem;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-glass-light);
+}
+
+.key-summary-text {
+  color: var(--text-white);
+  font-size: 1rem;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* 개선된 어두운 글래스 스타일 - 큐레이터 */
+.curator-section {
+  background: var(--glass-dark);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border-dark);
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-glass-dark);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.curator-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  background: var(--glass-darker);
+}
+
+.curator-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--sky-gradient);
+}
+
+/* 큐레이터 섹션 헤더 - 더 크고 하얀색 글씨 */
+.curator-section h4 {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: var(--text-white) !important;
+  margin-bottom: 1.25rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.curator-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.curator-summary {
+  font-size: 1.2rem;
+  color: var(--text-white);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  border-left: 4px solid transparent;
+  border-image: var(--sky-gradient) 1;
+}
+
+.curator-points {
+  list-style: none;
+  padding: 0;
+}
+
+.curator-point {
+  display: flex;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: var(--blur-light);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid;
+  border-left-color: transparent;
+  border-image: var(--sky-gradient) 1;
+  box-shadow: var(--shadow-glass-dark);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.curator-point:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-hover);
+}
+
+.curator-point-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--sky-gradient);
+  color: var(--text-white);
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-right: 1.25rem;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-glass-light);
+}
+
+.curator-point-text {
+  color: var(--text-white);
+  font-size: 1rem;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* 요약 섹션 */
+.summary-section {
+  background: var(--glass-dark);
+  backdrop-filter: var(--blur-glass);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border-dark);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-glass-dark);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.summary-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  background: var(--glass-darker);
+}
+
+/* 헬프 텍스트 */
+.help-text {
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* 숨김 클래스 */
+.hidden {
+  display: none !important;
+}
+
+/* 스크린 리더 전용 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem 0.5rem;
+    gap: 1.5rem;
+  }
+  
+  .dashboard-header {
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .dashboard-title {
+    font-size: 2.2rem;
+  }
+  
+  .dashboard-subtitle {
+    font-size: 1rem;
+  }
+  
+  .dashboard-card {
+    padding: 2rem;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .tab-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .tab-button {
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 1.8rem;
+  }
+  
+  .dashboard-card {
+    padding: 1.5rem;
+  }
+  
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* 다크모드 대응 - 모든 텍스트가 하얀색으로 표시되도록 */
+@media (prefers-color-scheme: dark) {
+  .result-content p,
+  .key-summary-text,
+  .curator-point-text,
+  .curator-summary,
+  .curator-title {
+    color: var(--text-white);
+  }
+}
