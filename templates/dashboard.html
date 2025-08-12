@@ -12,7 +12,7 @@
     <meta property="og:description" content="YouTube 동영상의 음성을 고품질 AI로 텍스트로 변환합니다">
     <meta property="og:type" content="website">
     
-    <title>유튜브 큐레이터(정범test/0812_v01) - 음성을 텍스트로 변환</title>
+    <title>유튜브 큐레이터(정범test/0813_v02) - 음성을 텍스트로 변환</title>
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
@@ -54,7 +54,7 @@
         <header class="dashboard-header" role="banner">
             <h1 class="dashboard-title">
                 <span role="img" aria-label="음성 아이콘">🎵</span>
-                유튜브 큐레이터(정범test/0812_v01)
+                유튜브 큐레이터(정범test/0813_v02)
             </h1>
             <p class="dashboard-subtitle">
                 YouTube 동영상의 음성을 고품질 AI로 텍스트로 변환합니다
@@ -62,99 +62,121 @@
         </header>
 
         <!-- Main Content -->
-        <main id="main-content" class="dashboard-card" role="main">
-            <!-- Transcription Form -->
-            <form id="transcribeForm" novalidate aria-labelledby="form-title">
-                <h2 id="form-title" class="sr-only">음성 변환 설정</h2>
-                
-                <!-- URL Input -->
-                <div class="form-group">
-                    <label for="url" class="form-label">
-                        YouTube URL
-                        <span class="text-red-500" aria-label="필수 입력">*</span>
-                    </label>
-                    <input 
-                        type="url" 
-                        id="url" 
-                        name="url" 
-                        class="form-input"
-                        placeholder="https://youtube.com/watch?v=..."
-                        required
-                        aria-describedby="url-help"
-                        autocomplete="url"
-                    >
-                    <div id="url-help" class="text-sm text-gray-600 mt-1">
-                        YouTube 동영상 또는 유튜브 쇼츠 URL을 입력하세요
-                    </div>
+        <main id="main-content" class="main-content" role="main">
+            
+            <!-- URL Input Card -->
+            <div class="input-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span role="img" aria-label="링크 아이콘">🔗</span>
+                        YouTube URL 입력
+                    </h2>
+                    <p class="card-subtitle">변환할 YouTube 동영상 또는 쇼츠 URL을 입력하세요</p>
                 </div>
-
-                <!-- Options Grid -->
-                <fieldset class="options-grid">
-                    <legend class="form-label">변환 설정</legend>
+                
+                <form id="transcribeForm" novalidate aria-labelledby="form-title">
+                    <h3 id="form-title" class="sr-only">음성 변환 설정</h3>
                     
-                    <!-- Audio Format -->
                     <div class="form-group">
-                        <label for="format" class="form-label">오디오 포맷</label>
-                        <select id="format" name="format" class="form-input form-select" aria-describedby="format-help">
+                        <label for="url" class="form-label">
+                            YouTube URL
+                            <span class="text-accent" aria-label="필수 입력">*</span>
+                        </label>
+                        <input 
+                            type="url" 
+                            id="url" 
+                            name="url" 
+                            class="form-input"
+                            placeholder="https://youtube.com/watch?v=..."
+                            required
+                            aria-describedby="url-help"
+                            autocomplete="url"
+                        >
+                        <div id="url-help" class="help-text">
+                            YouTube 동영상 또는 유튜브 쇼츠 URL을 입력하세요
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span role="img" aria-label="설정 아이콘">⚙️</span>
+                        변환 설정
+                    </h2>
+                </div>
+                
+                <!-- Quick Settings Grid -->
+                <div class="quick-settings-grid">
+                    <!-- Audio Format -->
+                    <div class="setting-item">
+                        <label for="format" class="setting-label">오디오 포맷</label>
+                        <select id="format" name="format" class="form-select" aria-describedby="format-help">
                             <option value="mp3">MP3 (권장)</option>
                             <option value="wav">WAV (고품질)</option>
                         </select>
-                        <div id="format-help" class="text-sm text-gray-600 mt-1">
+                        <div id="format-help" class="help-text">
                             MP3는 빠르고, WAV는 더 높은 음질을 제공합니다
                         </div>
                     </div>
 
                     <!-- Recognition Method -->
-                    <div class="form-group">
-                        <label for="method" class="form-label">음성 인식 방법</label>
-                        <select id="method" name="method" class="form-input form-select" aria-describedby="method-help">
+                    <div class="setting-item">
+                        <label for="method" class="setting-label">음성 인식 방법</label>
+                        <select id="method" name="method" class="form-select" aria-describedby="method-help">
                             <option value="whisper">Whisper AI (권장)</option>
                             <option value="google">Google Speech</option>
                             <option value="both">두 방법 모두</option>
                         </select>
-                        <div id="method-help" class="text-sm text-gray-600 mt-1">
+                        <div id="method-help" class="help-text">
                             Whisper는 오프라인, Google은 온라인 처리됩니다
                         </div>
                     </div>
-                </fieldset>
+                </div>
 
-                <!-- Advanced Options -->
-                <details class="form-group">
-                    <summary class="form-label cursor-pointer" style="list-style: none;">
-                        <span>고급 설정</span>
-                        <span style="float: right;">▼</span>
+                <!-- Advanced Options Card -->
+                <details class="advanced-card">
+                    <summary class="advanced-toggle">
+                        <span class="advanced-title">고급 설정</span>
+                        <span class="toggle-icon">▼</span>
                     </summary>
                     
-                    <div class="mt-4">
-                        <div class="form-group">
-                            <label for="model" class="form-label">Whisper 모델 크기</label>
-                            <select id="model" name="model" class="form-input form-select" aria-describedby="model-help">
+                    <div class="advanced-content">
+                        <div class="setting-item">
+                            <label for="model" class="setting-label">Whisper 모델 크기</label>
+                            <select id="model" name="model" class="form-select" aria-describedby="model-help">
                                 <option value="tiny">Tiny (가장 빠름, 기본 품질)</option>
                                 <option value="base" selected>Base (빠름, 좋은 품질)</option>
                                 <option value="small">Small (보통 속도, 높은 품질)</option>
                                 <option value="medium">Medium (느림, 매우 높은 품질)</option>
                                 <option value="large">Large (매우 느림, 최고 품질)</option>
                             </select>
-                            <div id="model-help" class="text-sm text-gray-600 mt-1">
+                            <div id="model-help" class="help-text">
                                 더 큰 모델은 더 정확하지만 처리 시간이 오래 걸립니다
                             </div>
                         </div>
                     </div>
                 </details>
 
-                <!-- Submit Button -->
-                <button 
-                    type="submit" 
-                    id="submitBtn"
-                    class="btn btn-primary w-full"
-                    aria-describedby="submit-help"
-                >
-                    <span>변환 시작</span>
-                </button>
-                <div id="submit-help" class="text-sm text-gray-600 mt-2 text-center">
-                    처리 시간은 동영상 길이와 선택한 설정에 따라 달라집니다
+                <!-- Start Button -->
+                <div class="action-section">
+                    <button 
+                        type="submit" 
+                        id="submitBtn"
+                        class="btn btn-primary btn-large"
+                        aria-describedby="submit-help"
+                        form="transcribeForm"
+                    >
+                        <span role="img" aria-hidden="true">🚀</span>
+                        <span>변환 시작</span>
+                    </button>
+                    <div id="submit-help" class="help-text text-center">
+                        처리 시간은 동영상 길이와 선택한 설정에 따라 달라집니다
+                    </div>
                 </div>
-            </form>
+            </div>
 
             <!-- Error Messages -->
             <div id="error-container" class="status-card hidden" role="alert" aria-live="assertive">
@@ -180,11 +202,17 @@
                 </h3>
                 <div class="tab-container">
                     <div class="tab-nav" role="tablist" aria-label="결과 유형">
-                        <button id="tab-full-script" role="tab" aria-selected="true" aria-controls="panel-full-script" class="tab-button active">전체 스크립트</button>
+                        <button id="tab-timeline-summary" role="tab" aria-selected="true" aria-controls="panel-timeline-summary" class="tab-button active">타임라인 요약</button>
+                        <button id="tab-full-script" role="tab" aria-selected="false" aria-controls="panel-full-script" class="tab-button">전체 스크립트</button>
                         <button id="tab-key-summary" role="tab" aria-selected="false" aria-controls="panel-key-summary" class="tab-button">핵심요약</button>
                         <button id="tab-curator" role="tab" aria-selected="false" aria-controls="panel-curator" class="tab-button">큐레이터</button>
                     </div>
-                    <div id="panel-full-script" role="tabpanel" aria-labelledby="tab-full-script" class="tab-panel active">
+                    <div id="panel-timeline-summary" role="tabpanel" aria-labelledby="tab-timeline-summary" class="tab-panel active">
+                        <div id="timelineSummaryContent" class="result-content timeline-content" role="region" aria-label="타임라인 요약">
+                            <!-- Timeline summary will be inserted here -->
+                        </div>
+                    </div>
+                    <div id="panel-full-script" role="tabpanel" aria-labelledby="tab-full-script" class="tab-panel" style="display: none;">
                         <div id="fullScriptContent" class="result-content" role="region" aria-label="전체 스크립트">
                             <!-- Full script will be inserted here -->
                         </div>

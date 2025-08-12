@@ -249,6 +249,10 @@ const ResultComponents = {
 
         // Start summarization
         SummarizationComponents.getSummaries(scriptText);
+        
+        // Generate timeline summary
+        console.log('Starting timeline summary generation...');
+        SummarizationComponents.getTimelineSummary(scriptText);
     },
 
     // Format text for display with improved paragraph breaks
@@ -309,6 +313,44 @@ const SummarizationComponents = {
         } catch (error) {
             SummarizationComponents.showKeySummary({ error: 'Error fetching summaries.' });
             SummarizationComponents.showCuratorSummary({ error: 'Error fetching summaries.' });
+        }
+    },
+
+    getTimelineSummary: async (text) => {
+        console.log('getTimelineSummary called with text length:', text.length);
+        
+        // Show loading state for timeline summary
+        const timelineElement = document.getElementById('timelineSummaryContent');
+        if (!timelineElement) {
+            console.error('timelineSummaryContent element not found!');
+            return;
+        }
+        
+        timelineElement.innerHTML = '<div class="loading-spinner"></div> 타임라인 요약 생성 중...';
+        console.log('Loading state set for timeline summary');
+
+        try {
+            console.log('Fetching timeline summary from API...');
+            const response = await fetch('/summarize/timeline_summary', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+
+            console.log('API response status:', response.status);
+            
+            if (response.ok) {
+                const summary = await response.json();
+                console.log('Timeline summary received:', summary);
+                SummarizationComponents.showTimelineSummary(summary);
+            } else {
+                console.error('API response not ok:', response.status, response.statusText);
+                SummarizationComponents.showTimelineSummary({ error: 'Failed to load timeline summary.' });
+            }
+
+        } catch (error) {
+            console.error('Error in getTimelineSummary:', error);
+            SummarizationComponents.showTimelineSummary({ error: 'Error fetching timeline summary.' });
         }
     },
 
@@ -412,6 +454,53 @@ const SummarizationComponents = {
             </div>
         `;
         curatorContent.innerHTML = html;
+    },
+
+    showTimelineSummary: (summary) => {
+        const timelineContent = document.getElementById('timelineSummaryContent');
+        if (summary.error) {
+            timelineContent.innerHTML = `
+                <div class="timeline-section" style="background: rgba(255, 100, 100, 0.1); border-color: rgba(255, 100, 100, 0.3);">
+                    <div class="timeline-header">
+                        <span class="timeline-timestamp">오류</span>
+                        <h4 class="timeline-title">타임라인 요약 생성 오류</h4>
+                    </div>
+                    <div class="timeline-content-text">${summary.error}</div>
+                </div>`;
+            return;
+        }
+
+        if (!Array.isArray(summary) || summary.length === 0) {
+            timelineContent.innerHTML = `
+                <div class="timeline-section" style="text-align: center;">
+                    <div class="timeline-content-text">📝 타임라인으로 구성할 내용이 없습니다.</div>
+                </div>`;
+            return;
+        }
+
+        let html = '';
+        summary.forEach((section, index) => {
+            const keywords = Array.isArray(section.keywords) ? section.keywords : [];
+            html += `
+                <div class="timeline-section">
+                    <div class="timeline-header">
+                        <span class="timeline-timestamp">${section.timestamp || `${(index + 1) * 5}분`}</span>
+                        <h4 class="timeline-title">${section.subtitle || `구간 ${index + 1}`}</h4>
+                    </div>
+                    <div class="timeline-content-text">${section.summary || '요약 내용이 없습니다.'}</div>
+                    ${keywords.length > 0 ? `
+                        <div class="timeline-keywords">
+                            ${keywords.map(keyword => `<span class="timeline-keyword">${keyword}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    ${section.oneline_summary ? `
+                        <div class="timeline-oneline">${section.oneline_summary}</div>
+                    ` : ''}
+                </div>
+            `;
+        });
+        
+        timelineContent.innerHTML = html;
     }
 };
 
